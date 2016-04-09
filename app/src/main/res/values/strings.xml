@@ -1,0 +1,8 @@
+<resources>
+    <string name="app_name">testWork</string>
+
+    <string name="name_autor">Name</string>
+    <string name="type_music">Type music</string>
+    <string name="info">count album, count record</string>
+
+</resources>
