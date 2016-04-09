@@ -4,15 +4,20 @@ import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
+import android.util.Log;
 
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
-import com.example.serg.testwork.models.MyData;
+import com.example.serg.testwork.models.Artist;
+import com.example.serg.testwork.service.ArtistService;
+import com.example.serg.testwork.service.ServiceFactory;
 
-import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+import rx.Subscriber;
+import rx.android.schedulers.AndroidSchedulers;
+import rx.schedulers.Schedulers;
 
 
 public class MainActivity extends AppCompatActivity {
@@ -29,13 +34,31 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        List<MyData> myData = new ArrayList<>();
-        for (int i = 0; i < 10; i++) {
-            MyData myData1 = new MyData("url", "name name", "type music type music", "count record and info");
-            myData.add(myData1);
-        }
-        final RecyclerView.Adapter adapter = new RecyclerViewItemListAdapter(myData);
+        final RecyclerViewItemListAdapter adapter = new RecyclerViewItemListAdapter();
         recyclerView.setAdapter(adapter);
+
+        ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class, ArtistService.SERVICE_ENDPOINT);
+        service.getUser("artists.json")
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Artist>>() {
+                    @Override
+                    public final void onCompleted() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public final void onError(Throwable e) {
+                        Log.e("GithubDemo", e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(List<Artist> githubses) {
+                        for (Artist item : githubses) {
+                            adapter.addData(item);
+                        }
+                    }
+                });
     }
 
     @Override
