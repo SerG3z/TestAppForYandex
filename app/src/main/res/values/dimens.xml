@@ -9,4 +9,8 @@
     <dimen name="layout_margin">10dp</dimen>
     <dimen name="size_text_item_name">18dp</dimen>
 
+    <!--artist details-->
+    <dimen name="left_margin_details">16dp</dimen>
+    <dimen name="top_margin_details">16dp</dimen>
+
 </resources>

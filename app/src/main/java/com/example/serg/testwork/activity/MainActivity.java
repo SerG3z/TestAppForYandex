@@ -1,11 +1,14 @@
-package com.example.serg.testwork;
+package com.example.serg.testwork.activity;
 
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
+import android.view.View;
+import android.widget.Toast;
 
+import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
 import com.example.serg.testwork.service.ArtistService;
@@ -59,7 +62,17 @@ public class MainActivity extends AppCompatActivity {
                         }
                     }
                 });
+
+        adapter.setOnItemClickListener(new RecyclerViewItemListAdapter.RecyclerViewItemClickListener() {
+            @Override
+            public void onItemClick(int position, View v) {
+                Toast.makeText(getApplicationContext(), "жмяк", Toast.LENGTH_SHORT).show();
+            }
+        });
     }
+
+
+    
 
     @Override
     protected void onDestroy() {

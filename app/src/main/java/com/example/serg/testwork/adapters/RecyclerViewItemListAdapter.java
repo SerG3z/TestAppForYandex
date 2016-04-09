@@ -7,6 +7,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.models.Artist;
@@ -25,13 +26,18 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     private List<Artist> dateList;
     private Context context;
+    private RecyclerViewItemClickListener itemClickListener;
+
+    public void setOnItemClickListener(RecyclerViewItemClickListener myClickListener) {
+        this.itemClickListener = myClickListener;
+    }
 
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int i) {
         View view = LayoutInflater.from(viewGroup.getContext())
                 .inflate(R.layout.item_list_name, viewGroup, false);
         context = viewGroup.getContext();
-        Holder Holder = new Holder(view);
+        Holder Holder = new Holder(view, itemClickListener);
         return Holder;
     }
 
@@ -54,10 +60,6 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         dateList.add(artist);
         notifyDataSetChanged();
     }
-    public void addAllData(List<Artist> artists) {
-        dateList.addAll(artists);
-        notifyDataSetChanged();
-    }
 
     public void clear() {
         dateList.clear();
@@ -69,7 +71,11 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         return dateList.size();
     }
 
-    public class Holder extends RecyclerView.ViewHolder {
+    public interface RecyclerViewItemClickListener {
+        void onItemClick(int position, View v);
+    }
+
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
         @Bind(R.id.item_list_image)
         ImageView imageImageView;
         @Bind(R.id.item_list_name)
@@ -79,9 +85,20 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         @Bind(R.id.item_list_info)
         TextView infoTextView;
 
-        public Holder(View itemView) {
+        RecyclerViewItemClickListener listener;
+
+        public Holder(View itemView, RecyclerViewItemClickListener clickListener) {
             super(itemView);
             ButterKnife.bind(this, itemView);
+            listener = clickListener;
+            itemView.setOnClickListener(this);
+        }
+
+        @Override
+        public void onClick(View view) {
+            if (listener != null){
+                listener.onItemClick(getPosition(), view);
+            }
         }
     }
 }
