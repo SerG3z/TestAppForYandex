@@ -46,12 +46,17 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         Picasso.with(context)
                 .load(dateList.get(position).getCover().getSmall())
                 .into(holder.imageImageView);
+
         holder.nameTextView.setText(dateList.get(position).getName());
+
         holder.typeTextView.setText(Arrays.toString(dateList.get(position).getGenres()));
-        final int countTraks = dateList.get(position).getTracks();
+
+        final int countTracks = dateList.get(position).getTracks();
+        String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
+
         final int countAlbums = dateList.get(position).getAlbums();
-        String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTraks, countTraks);
         String pluralsAlbums = context.getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
+
         holder.infoTextView.setText(pluralsAlbums + " " + pluralsTracks);
 
     }
