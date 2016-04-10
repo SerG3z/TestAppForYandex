@@ -8,9 +8,14 @@
     <dimen name="top_margin">16dp</dimen>
     <dimen name="layout_margin">10dp</dimen>
     <dimen name="size_text_item_name">18dp</dimen>
+    <dimen name="preview_image_size">120dp</dimen>
 
     <!--artist details-->
     <dimen name="left_margin_details">16dp</dimen>
+    <dimen name="right_margin_details">16dp</dimen>
     <dimen name="top_margin_details">16dp</dimen>
+    <dimen name="size_text_biografy">18dp</dimen>
+    <dimen name="top_margin_off_title_biografy">10dp</dimen>
+    <dimen name="bottom_margin_list_view">16dp</dimen>
 
 </resources>

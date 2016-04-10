@@ -59,6 +59,10 @@ public class ArtistDetailsActivity extends AppCompatActivity {
                 getApplicationContext(), artist.getAlbums(), artist.getTracks()));
         biografyInfo.setText(artist.getDescription());
 
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
+        actionBar.setDisplayHomeAsUpEnabled(true);
+        actionBar.setTitle(artist.getName());
+
     }
 
     private void initIntent(Intent intent) {

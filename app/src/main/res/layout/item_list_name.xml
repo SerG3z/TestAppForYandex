@@ -8,8 +8,8 @@
 
     <ImageView
         android:id="@+id/item_list_image"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
+        android:layout_width="@dimen/preview_image_size"
+        android:layout_height="@dimen/preview_image_size"
         android:src="@android:drawable/gallery_thumb" />
 
     <TextView
@@ -28,7 +28,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_below="@id/item_list_name"
-        android:layout_marginTop="5dp"
+        android:layout_marginTop="10dp"
         android:layout_marginLeft="@dimen/left_margin"
         android:layout_toRightOf="@id/item_list_image"
         android:text="@string/type_music" />
@@ -38,7 +38,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/info"
-        android:layout_marginTop="15dp"
+        android:layout_marginTop="33dp"
         android:layout_below="@id/item_list_type"
         android:layout_alignLeft="@+id/item_list_type" />
 

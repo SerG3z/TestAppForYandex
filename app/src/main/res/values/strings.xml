@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <resources>
 
-    <string name="app_name">testWork</string>
+    <string name="app_name">Исполнители</string>
 
-    <string name="name_autor">Name</string>
-    <string name="type_music">Type music</string>
-    <string name="info">count album, count record</string>
+    <string name="name_autor">Название группы</string>
+    <string name="type_music">Жанры</string>
+    <string name="info">количество альбомов, количество песен</string>
 
     <string name="title_biografy">Биография</string>
 
