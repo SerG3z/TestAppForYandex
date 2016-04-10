@@ -43,22 +43,35 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public void onBindViewHolder(Holder holder, int position) {
+        Artist dataArtist = dateList.get(position);
+
         Picasso.with(context)
-                .load(dateList.get(position).getCover().getSmall())
+                .load(dataArtist.getCover().getSmall())
                 .into(holder.imageImageView);
 
-        holder.nameTextView.setText(dateList.get(position).getName());
+        holder.nameTextView.setText(dataArtist.getName());
 
-        holder.typeTextView.setText(Arrays.toString(dateList.get(position).getGenres()));
+        holder.typeTextView.setText(getStringGenres(dataArtist.getGenres()));
+        holder.infoTextView.setText(getStringAlbumsAndTrack(
+                context, dataArtist.getAlbums(), dataArtist.getTracks()));
 
-        final int countTracks = dateList.get(position).getTracks();
-        String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
+    }
 
-        final int countAlbums = dateList.get(position).getAlbums();
+    public static String getStringAlbumsAndTrack(Context context, int countAlbums, int countTracks) {
         String pluralsAlbums = context.getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
+        String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
+        return pluralsAlbums + ", " + pluralsTracks;
+    }
 
-        holder.infoTextView.setText(pluralsAlbums + " " + pluralsTracks);
-
+    public static String getStringGenres(String[] arrayGenres) {
+        StringBuilder builder = new StringBuilder();
+        for (int i = 0; i < arrayGenres.length; i++) {
+            builder.append(arrayGenres[i]);
+            if (i != arrayGenres.length - 1) {
+                builder.append(", ");
+            }
+        }
+        return builder.toString();
     }
 
 

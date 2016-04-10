@@ -9,6 +9,7 @@ import android.widget.ImageView;
 import android.widget.TextView;
 
 import com.example.serg.testwork.R;
+import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
 import com.squareup.picasso.Picasso;
 
@@ -53,12 +54,9 @@ public class ArtistDetailsActivity extends AppCompatActivity {
                 .load(artist.getCover().getBig())
                 .into(imageView);
 
-        typeMusic.setText(Arrays.toString(artist.getGenres()));
-        final int countTracks = artist.getTracks();
-        final int countAlbums = artist.getAlbums();
-        String pluralsTracks = getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
-        String pluralsAlbums = getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
-        typeInfo.setText(pluralsAlbums + " " + pluralsTracks);
+        typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
+        typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(
+                getApplicationContext(), artist.getAlbums(), artist.getTracks()));
         biografyInfo.setText(artist.getDescription());
 
     }
