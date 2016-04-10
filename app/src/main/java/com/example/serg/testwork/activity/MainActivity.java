@@ -1,5 +1,6 @@
 package com.example.serg.testwork.activity;
 
+import android.content.Intent;
 import android.os.Bundle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
@@ -67,12 +68,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onItemClick(int position, View v) {
                 Toast.makeText(getApplicationContext(), "жмяк", Toast.LENGTH_SHORT).show();
+                Intent intent = ArtistDetailsActivity.newIntent(getApplicationContext(), adapter.getItem(position));
+                startActivity(intent);
             }
         });
     }
 
 
-    
+
 
     @Override
     protected void onDestroy() {
