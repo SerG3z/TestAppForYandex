@@ -13,8 +13,8 @@ import rx.Observable;
  */
 
 public interface ArtistService {
-    String SERVICE_ENDPOINT = "http://cache-novosibirsk02.cdn.yandex.net/download.cdn.yandex.net/";
+    String SERVICE_ENDPOINT = "http://cache-novosibirsk02.cdn.yandex.net/download.cdn.yandex.net//mobilization-2016";
 
-    @GET("/mobilization-2016/{login}")
-    Observable<List<Artist>> getUser(@Path("login") String login);
+    @GET("/artists.json")
+    Observable<List<Artist>> getDataArtist();
 }

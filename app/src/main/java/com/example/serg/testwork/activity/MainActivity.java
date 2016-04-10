@@ -3,6 +3,7 @@ package com.example.serg.testwork.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
+import android.support.v4.widget.SwipeRefreshLayout;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
@@ -30,7 +31,10 @@ public class MainActivity extends AppCompatActivity {
     private static final String SAVE_LISTARTIST_KEY = "save_list_artist";
     @Bind(R.id.first_recycler_view)
     RecyclerView recyclerView;
+    @Bind(R.id.swipe_refresh_layout)
+    SwipeRefreshLayout swipeRefreshLayout;
     List<Artist> artistList = new ArrayList<>();
+    RecyclerViewItemListAdapter adapter;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -41,35 +45,13 @@ public class MainActivity extends AppCompatActivity {
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        final RecyclerViewItemListAdapter adapter = new RecyclerViewItemListAdapter();
+        adapter = new RecyclerViewItemListAdapter();
 
         if (savedInstanceState != null) {
             artistList = savedInstanceState.getParcelableArrayList(SAVE_LISTARTIST_KEY);
                 adapter.addAllData(artistList);
         } else {
-            ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class, ArtistService.SERVICE_ENDPOINT);
-            service.getUser("artists.json")
-                    .subscribeOn(Schedulers.newThread())
-                    .observeOn(AndroidSchedulers.mainThread())
-                    .subscribe(new Subscriber<List<Artist>>() {
-                        @Override
-                        public final void onCompleted() {
-                            // do nothing
-                        }
-
-                        @Override
-                        public final void onError(Throwable e) {
-                            Log.e("GithubDemo", e.getMessage());
-                        }
-
-                        @Override
-                        public void onNext(List<Artist> githubses) {
-                            for (Artist item : githubses) {
-                                adapter.addData(item);
-                                artistList.add(item);
-                            }
-                        }
-                    });
+            downloadDate();
         }
 
         recyclerView.setAdapter(adapter);
@@ -81,6 +63,40 @@ public class MainActivity extends AppCompatActivity {
                 startActivity(intent);
             }
         });
+
+        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
+            @Override
+            public void onRefresh() {
+                downloadDate();
+                swipeRefreshLayout.setRefreshing(false);
+            }
+        });
+    }
+
+    private void downloadDate() {
+        ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class, ArtistService.SERVICE_ENDPOINT);
+        service.getDataArtist()
+                .subscribeOn(Schedulers.newThread())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribe(new Subscriber<List<Artist>>() {
+                    @Override
+                    public final void onCompleted() {
+                        // do nothing
+                    }
+
+                    @Override
+                    public final void onError(Throwable e) {
+                        Log.e("GithubDemo", e.getMessage());
+                    }
+
+                    @Override
+                    public void onNext(List<Artist> githubses) {
+                        for (Artist item : githubses) {
+                            adapter.addData(item);
+                            artistList.add(item);
+                        }
+                    }
+                });
     }
 
     @Override
@@ -88,7 +104,6 @@ public class MainActivity extends AppCompatActivity {
         super.onSaveInstanceState(outState);
         outState.putParcelableArrayList(SAVE_LISTARTIST_KEY, (ArrayList<? extends Parcelable>) artistList);
     }
-
 
     @Override
     protected void onDestroy() {

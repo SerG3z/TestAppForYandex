@@ -8,12 +8,12 @@ import android.support.v7.app.AppCompatActivity;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
-import com.squareup.picasso.Picasso;
-
-import java.util.Arrays;
+//import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
@@ -50,8 +50,12 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initIntent(getIntent());
 
-        Picasso.with(getApplicationContext())
+//        Picasso.with(getApplicationContext())
+//                .load(artist.getCover().getBig())
+//                .into(imageView);
+        Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
 
         typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
@@ -60,9 +64,10 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         biografyInfo.setText(artist.getDescription());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        actionBar.setDisplayHomeAsUpEnabled(true);
-        actionBar.setTitle(artist.getName());
-
+        if (actionBar != null) {
+            actionBar.setDisplayHomeAsUpEnabled(true);
+            actionBar.setTitle(artist.getName());
+        }
     }
 
     private void initIntent(Intent intent) {

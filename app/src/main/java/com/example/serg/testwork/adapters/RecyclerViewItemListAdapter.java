@@ -8,9 +8,11 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.bumptech.glide.Glide;
+import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.models.Artist;
-import com.squareup.picasso.Picasso;
+//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
 import java.util.Arrays;
@@ -45,8 +47,12 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(Holder holder, int position) {
         Artist dataArtist = dateList.get(position);
 
-        Picasso.with(context)
+//        Picasso.with(context)
+//                .load(dataArtist.getCover().getSmall())
+//                .into(holder.imageImageView);
+        Glide.with(context)
                 .load(dataArtist.getCover().getSmall())
+                .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageImageView);
 
         holder.nameTextView.setText(dataArtist.getName());
