@@ -1,4 +1,6 @@
+<?xml version="1.0" encoding="utf-8"?>
 <resources>
+
     <string name="app_name">testWork</string>
 
     <string name="name_autor">Name</string>
@@ -6,5 +8,28 @@
     <string name="info">count album, count record</string>
 
     <string name="title_biografy">Биография</string>
+
+    <plurals name="plurals_tracks">
+        <item quantity="zero">нет песен</item>
+        <item quantity="one">%1$d песня</item>
+        <item quantity="two">%1$d песни</item>
+        <item quantity="few">%1$d песни</item>
+        <item quantity="many">%1$d песен</item>
+        <item quantity="other">%1$d песен</item>
+    </plurals>
+
+    <plurals name="plurals_albums">
+        <item quantity="zero">нет альбомов</item>
+        <item quantity="one">%1$d альбом</item>
+        <item quantity="two">%1$d альбома</item>
+        <item quantity="few">%1$d альбома</item>
+        <item quantity="many">%1$d альбомов</item>
+        <item quantity="other">%1$d альбомов</item>
+    </plurals>
+
+
+
+
+
 
 </resources>

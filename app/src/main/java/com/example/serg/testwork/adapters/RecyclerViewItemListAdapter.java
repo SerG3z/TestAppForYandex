@@ -7,13 +7,13 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.models.Artist;
 import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
@@ -47,9 +47,15 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
                 .load(dateList.get(position).getCover().getSmall())
                 .into(holder.imageImageView);
         holder.nameTextView.setText(dateList.get(position).getName());
-        holder.typeTextView.setText(dateList.get(position).getDescription());
-        holder.infoTextView.setText(dateList.get(position).getLink());
+        holder.typeTextView.setText(Arrays.toString(dateList.get(position).getGenres()));
+        final int countTraks = dateList.get(position).getTracks();
+        final int countAlbums = dateList.get(position).getAlbums();
+        String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTraks, countTraks);
+        String pluralsAlbums = context.getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
+        holder.infoTextView.setText(pluralsAlbums + " " + pluralsTracks);
+
     }
+
 
     public RecyclerViewItemListAdapter() {
         super();
@@ -64,6 +70,10 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
     public void clear() {
         dateList.clear();
         notifyDataSetChanged();
+    }
+
+    public Artist getItem(int position) {
+        return dateList.get(position);
     }
 
     @Override

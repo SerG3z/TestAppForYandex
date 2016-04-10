@@ -1,46 +1,52 @@
 <?xml version="1.0" encoding="utf-8"?>
-<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
-    android:layout_width="match_parent"
-    android:layout_height="match_parent"
-    android:orientation="vertical">
+<ScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="fill_parent"
+    android:layout_height="wrap_content">
 
-    <ImageView
-        android:id="@+id/image_details"
-        android:layout_width="match_parent"
+    <LinearLayout
+        android:layout_width="fill_parent"
         android:layout_height="wrap_content"
-        android:src="@android:drawable/dialog_frame" />
+        android:orientation="vertical"
+        >
 
-    <TextView
-        android:id="@+id/music_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/left_margin_details"
-        android:layout_marginTop="@dimen/top_margin_details"
-        android:text="text text text text text text text text " />
+        <ImageView
+            android:id="@+id/image_details"
+            android:layout_width="fill_parent"
+            android:layout_height="fill_parent"
+            android:src="@android:mipmap/sym_def_app_icon" />
 
-    <TextView
-        android:id="@+id/info_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/left_margin_details"
-        android:layout_marginTop="@dimen/top_margin_details"
-        android:text="text text text text text text text text " />
+        <TextView
+            android:id="@+id/music_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin_details"
+            android:layout_marginTop="@dimen/top_margin_details"
+            android:text="text text text text text text text text " />
 
-    <TextView
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/left_margin_details"
-        android:layout_marginTop="@dimen/top_margin_details"
-        android:text="@string/title_biografy"
-        android:textColor="@android:color/black" />
+        <TextView
+            android:id="@+id/info_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin_details"
+            android:layout_marginTop="@dimen/top_margin_details"
+            android:text="text text text text text text text text " />
 
-    <TextView
-        android:id="@+id/biografy_info_details"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="@dimen/left_margin_details"
-        android:layout_marginTop="@dimen/top_margin_details"
-        android:text="text text text text text text text text "
-        android:textColor="@android:color/black" />
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin_details"
+            android:layout_marginTop="@dimen/top_margin_details"
+            android:text="@string/title_biografy"
+            android:textColor="@android:color/black" />
 
-</LinearLayout>
+        <TextView
+            android:id="@+id/biografy_info_details"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="@dimen/left_margin_details"
+            android:layout_marginTop="@dimen/top_margin_details"
+            android:text="text text text text text text text text "
+            android:textColor="@android:color/black" />
+
+    </LinearLayout>
+</ScrollView>
