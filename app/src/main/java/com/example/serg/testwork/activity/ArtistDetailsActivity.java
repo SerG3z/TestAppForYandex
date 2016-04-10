@@ -32,7 +32,6 @@ public class ArtistDetailsActivity extends AppCompatActivity {
     TextView biografyInfo;
 
     Artist artist;
-    Context context;
 
     private static final String ARTIST_DATA_KEY = "artist_data";
 
@@ -50,12 +49,16 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initIntent(getIntent());
 
-        Picasso.with(context)
+        Picasso.with(getApplicationContext())
                 .load(artist.getCover().getBig())
                 .into(imageView);
 
         typeMusic.setText(Arrays.toString(artist.getGenres()));
-        typeInfo.setText(artist.getTracks() + " " + artist.getAlbums());
+        final int countTracks = artist.getTracks();
+        final int countAlbums = artist.getAlbums();
+        String pluralsTracks = getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
+        String pluralsAlbums = getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
+        typeInfo.setText(pluralsAlbums + " " + pluralsTracks);
         biografyInfo.setText(artist.getDescription());
 
     }
