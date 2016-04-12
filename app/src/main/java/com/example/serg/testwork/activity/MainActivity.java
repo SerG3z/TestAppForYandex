@@ -9,6 +9,7 @@ import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.View;
+import android.widget.Toast;
 
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
@@ -56,10 +57,12 @@ public class MainActivity extends AppCompatActivity {
 
         recyclerView.setAdapter(adapter);
 
-        adapter.setOnItemClickListener(new RecyclerViewItemListAdapter.RecyclerViewItemClickListener() {
+        adapter.setOnItemClickListener(new RecyclerViewItemListAdapter
+                .RecyclerViewItemClickListener() {
             @Override
             public void onItemClick(int position, View v) {
-                Intent intent = ArtistDetailsActivity.newIntent(getApplicationContext(), adapter.getItem(position));
+                Intent intent = ArtistDetailsActivity.newIntent(getApplicationContext(),
+                        adapter.getItem(position));
                 startActivity(intent);
             }
         });
@@ -68,15 +71,14 @@ public class MainActivity extends AppCompatActivity {
             @Override
             public void onRefresh() {
                 downloadDate();
-                swipeRefreshLayout.setRefreshing(false);
             }
         });
     }
 
     private void downloadDate() {
         adapter.clear();
-        artistList.clear();
-        ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class, ArtistService.SERVICE_ENDPOINT);
+        ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class,
+                ArtistService.SERVICE_ENDPOINT);
         service.getDataArtist()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -84,18 +86,24 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public final void onCompleted() {
                         // do nothing
+                        artistList.clear();
+                        artistList.addAll(adapter.getAllData());
+                        swipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public final void onError(Throwable e) {
                         Log.e("Error download", e.getMessage());
+                        Toast.makeText(getApplicationContext(), "Проблема с загрузкой, загружена предыдущая версияфтв",
+                                Toast.LENGTH_SHORT).show();
+                        adapter.addAllData(artistList);
+                        swipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onNext(List<Artist> githubses) {
                         for (Artist item : githubses) {
                             adapter.addData(item);
-                            artistList.add(item);
                         }
                     }
                 });
@@ -104,7 +112,8 @@ public class MainActivity extends AppCompatActivity {
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY, (ArrayList<? extends Parcelable>) artistList);
+        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY,
+                (ArrayList<? extends Parcelable>) artistList);
     }
 
     @Override

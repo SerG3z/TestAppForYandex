@@ -96,6 +96,10 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+    public List<Artist> getAllData() {
+        return dateList;
+    }
+
     public void clear() {
         dateList.clear();
         notifyDataSetChanged();
