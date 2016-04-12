@@ -74,6 +74,8 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadDate() {
+        adapter.clear();
+        artistList.clear();
         ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class, ArtistService.SERVICE_ENDPOINT);
         service.getDataArtist()
                 .subscribeOn(Schedulers.newThread())
@@ -86,7 +88,7 @@ public class MainActivity extends AppCompatActivity {
 
                     @Override
                     public final void onError(Throwable e) {
-                        Log.e("GithubDemo", e.getMessage());
+                        Log.e("Error download", e.getMessage());
                     }
 
                     @Override
