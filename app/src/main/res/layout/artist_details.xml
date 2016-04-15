@@ -41,7 +41,7 @@
             android:textSize="@dimen/size_text_biografy" />
 
         <TextView
-            android:id="@+id/biografy_info_details"
+            android:id="@+id/biography_info_details"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginBottom="@dimen/bottom_margin_list_view"

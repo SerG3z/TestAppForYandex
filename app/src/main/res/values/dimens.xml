@@ -18,4 +18,9 @@
     <dimen name="top_margin_off_title_biografy">10dp</dimen>
     <dimen name="bottom_margin_list_view">16dp</dimen>
 
+    <!--error network-->
+    <dimen name="top_margin_error">16dp</dimen>
+    <dimen name="text_size_error">18dp</dimen>
+    <dimen name="top_margin_linear_layout">150dp</dimen>
+
 </resources>

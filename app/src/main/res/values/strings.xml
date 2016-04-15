@@ -8,6 +8,10 @@
     <string name="info">количество альбомов, количество песен</string>
 
     <string name="title_biografy">Биография</string>
+    <string name="text_toast_error">Проблема с сетью, загружены данные из кэша</string>
+    <string name="text_toast_download_complete">Данные обновлены</string>
+    <string name="text_error">Связь с сервером потеряна. Нажмите, чтобы повторить</string>
+    <string name="text_button_repeat">повторить</string>
 
     <plurals name="plurals_tracks">
         <item quantity="zero">нет песен</item>

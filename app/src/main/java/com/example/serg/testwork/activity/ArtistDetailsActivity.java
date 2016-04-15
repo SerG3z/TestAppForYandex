@@ -31,8 +31,8 @@ public class ArtistDetailsActivity extends AppCompatActivity {
     TextView typeMusic;
     @Bind(R.id.info_details)
     TextView typeInfo;
-    @Bind(R.id.biografy_info_details)
-    TextView biografyInfo;
+    @Bind(R.id.biography_info_details)
+    TextView biographyInfo;
 
     private static final String ARTIST_DATA_KEY = "artist_data";
 
@@ -56,15 +56,16 @@ public class ArtistDetailsActivity extends AppCompatActivity {
 
         Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
-                .crossFade()
-                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader8))
+                //gif animation download
+                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader9))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
+                .crossFade()
                 .into(imageView);
 
         typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
         typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(
                 getApplicationContext(), artist.getAlbums(), artist.getTracks()));
-        biografyInfo.setText(artist.getDescription());
+        biographyInfo.setText(artist.getDescription());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
