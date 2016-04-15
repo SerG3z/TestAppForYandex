@@ -79,6 +79,10 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    /*
+    * downloads data from json and adds data in adapter and local cache
+    *
+    * */
     private void downloadDate() {
         ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class,
                 ArtistService.SERVICE_ENDPOINT);
@@ -90,6 +94,7 @@ public class MainActivity extends AppCompatActivity {
                     public final void onCompleted() {
                         artistList.clear();
                         artistList.addAll(adapter.getAllData());
+                        //stop animation downloads
                         swipeRefreshLayout.setRefreshing(false);
                     }
 
@@ -107,6 +112,7 @@ public class MainActivity extends AppCompatActivity {
                                     Toast.LENGTH_LONG).show();
 
                         }
+                        //stop animation downloads
                         swipeRefreshLayout.setRefreshing(false);
                     }
 

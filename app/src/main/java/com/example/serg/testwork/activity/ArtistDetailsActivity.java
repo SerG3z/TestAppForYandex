@@ -34,11 +34,11 @@ public class ArtistDetailsActivity extends AppCompatActivity {
     @Bind(R.id.biografy_info_details)
     TextView biografyInfo;
 
-    Artist artist;
-    android.support.v7.app.ActionBar actionBar;
-
     private static final String ARTIST_DATA_KEY = "artist_data";
 
+    /*
+    * returns intent, which must be passed in this Activity
+    * */
     public static Intent newIntent(Context context, Artist artist) {
         Intent intent = new Intent(context, ArtistDetailsActivity.class);
         intent.putExtra(ARTIST_DATA_KEY, artist);
@@ -51,7 +51,8 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_details);
         ButterKnife.bind(this);
-        initIntent(getIntent());
+
+        Artist artist = initIntent(getIntent());
 
         Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
@@ -65,7 +66,7 @@ public class ArtistDetailsActivity extends AppCompatActivity {
                 getApplicationContext(), artist.getAlbums(), artist.getTracks()));
         biografyInfo.setText(artist.getDescription());
 
-        actionBar = getSupportActionBar();
+        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
         if (actionBar != null) {
             actionBar.setDisplayHomeAsUpEnabled(true);
             actionBar.setTitle(artist.getName());
@@ -83,10 +84,13 @@ public class ArtistDetailsActivity extends AppCompatActivity {
     }
 
 
-    private void initIntent(Intent intent) {
+    private Artist initIntent(Intent intent) {
         if (intent != null) {
-            artist = intent.getParcelableExtra(ARTIST_DATA_KEY);
+            return intent.getParcelableExtra(ARTIST_DATA_KEY);
+        } else {
+            return null;
         }
+
     }
 
     @Override

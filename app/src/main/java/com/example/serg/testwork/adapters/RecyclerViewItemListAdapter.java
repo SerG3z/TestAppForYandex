@@ -49,10 +49,6 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
     public void onBindViewHolder(Holder holder, int position) {
         Artist dataArtist = dateList.get(position);
 
-//        Picasso.with(context)
-//                .load(dataArtist.getCover().getSmall())
-//                .into(holder.imageImageView);
-
         Glide.with(context)
                 .load(dataArtist.getCover().getSmall())
                 .thumbnail(Glide.with(context).load(R.drawable.loader3))
@@ -67,12 +63,19 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     }
 
+    /*
+    * selects the correct declination and returns this string
+    * */
     public static String getStringAlbumsAndTrack(Context context, int countAlbums, int countTracks) {
         String pluralsAlbums = context.getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
         String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
         return pluralsAlbums + ", " + pluralsTracks;
     }
 
+    /*
+    * function inserts a comma after each world of the input array,
+    * except for the last and returns this string
+    * */
     public static String getStringGenres(String[] arrayGenres) {
         StringBuilder builder = new StringBuilder();
         for (int i = 0; i < arrayGenres.length; i++) {
@@ -95,20 +98,29 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         notifyDataSetChanged();
     }
 
+
     public void addAllData(List<Artist> artist) {
         dateList.addAll(artist);
         notifyDataSetChanged();
     }
 
+    /*
+    * returns information about all the artists
+    * */
     public List<Artist> getAllData() {
         return dateList;
     }
 
+    /*
+    * clears all data
+    * */
     public void clear() {
         dateList.clear();
         notifyDataSetChanged();
     }
-
+    /*
+    * returns data from position
+    * */
     public Artist getItem(int position) {
         return dateList.get(position);
     }
