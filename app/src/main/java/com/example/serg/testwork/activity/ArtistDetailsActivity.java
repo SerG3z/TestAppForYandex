@@ -8,17 +8,17 @@ import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
-//import com.squareup.picasso.Picasso;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+//import com.squareup.picasso.Picasso;
 
 /**
  * Created by serg on 09.04.16.
@@ -53,11 +53,10 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         ButterKnife.bind(this);
         initIntent(getIntent());
 
-//        Picasso.with(getApplicationContext())
-//                .load(artist.getCover().getBig())
-//                .into(imageView);
         Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
+                .crossFade()
+                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader8))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(imageView);
 
@@ -82,7 +81,6 @@ public class ArtistDetailsActivity extends AppCompatActivity {
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
 
     private void initIntent(Intent intent) {

@@ -13,6 +13,7 @@ import android.widget.Toast;
 
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
+import com.example.serg.testwork.decoration.DividerItemDecoration;
 import com.example.serg.testwork.models.Artist;
 import com.example.serg.testwork.service.ArtistService;
 import com.example.serg.testwork.service.ServiceFactory;
@@ -50,10 +51,13 @@ public class MainActivity extends AppCompatActivity {
 
         if (savedInstanceState != null) {
             artistList = savedInstanceState.getParcelableArrayList(SAVE_LISTARTIST_KEY);
-                adapter.addAllData(artistList);
+            adapter.addAllData(artistList);
         } else {
             downloadDate();
         }
+
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(this, LinearLayoutManager.VERTICAL));
 
         recyclerView.setAdapter(adapter);
 
@@ -76,7 +80,6 @@ public class MainActivity extends AppCompatActivity {
     }
 
     private void downloadDate() {
-        adapter.clear();
         ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class,
                 ArtistService.SERVICE_ENDPOINT);
         service.getDataArtist()
@@ -85,7 +88,6 @@ public class MainActivity extends AppCompatActivity {
                 .subscribe(new Subscriber<List<Artist>>() {
                     @Override
                     public final void onCompleted() {
-                        // do nothing
                         artistList.clear();
                         artistList.addAll(adapter.getAllData());
                         swipeRefreshLayout.setRefreshing(false);
@@ -94,14 +96,23 @@ public class MainActivity extends AppCompatActivity {
                     @Override
                     public final void onError(Throwable e) {
                         Log.e("Error download", e.getMessage());
-                        Toast.makeText(getApplicationContext(), "Проблема с загрузкой, загружена предыдущая версияфтв",
-                                Toast.LENGTH_SHORT).show();
-                        adapter.addAllData(artistList);
+                        if (artistList.size() > 0) {
+                            adapter.addAllData(artistList);
+                            Toast.makeText(getApplicationContext(),
+                                    "Проблема с сетью, загружены данные из кэша",
+                                    Toast.LENGTH_LONG).show();
+                        } else {
+                            Toast.makeText(getApplicationContext(),
+                                    "Проблема с сетью, проблема с кэшем, кэш пуст",
+                                    Toast.LENGTH_LONG).show();
+
+                        }
                         swipeRefreshLayout.setRefreshing(false);
                     }
 
                     @Override
                     public void onNext(List<Artist> githubses) {
+                        adapter.clear();
                         for (Artist item : githubses) {
                             adapter.addData(item);
                         }

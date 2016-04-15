@@ -1,10 +1,12 @@
 package com.example.serg.testwork.adapters;
 
 import android.content.Context;
+import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
+import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -50,8 +52,10 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 //        Picasso.with(context)
 //                .load(dataArtist.getCover().getSmall())
 //                .into(holder.imageImageView);
+
         Glide.with(context)
                 .load(dataArtist.getCover().getSmall())
+                .thumbnail(Glide.with(context).load(R.drawable.loader3))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageImageView);
 
