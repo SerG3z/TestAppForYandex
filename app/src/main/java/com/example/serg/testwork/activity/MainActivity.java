@@ -78,6 +78,7 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
                 Intent intent = ArtistDetailsActivity.newIntent(getApplicationContext(),
                         adapter.getItem(position));
                 startActivity(intent);
+                overridePendingTransition(R.anim.slide_in_left, R.anim.slide_out_left);
             }
         });
 
