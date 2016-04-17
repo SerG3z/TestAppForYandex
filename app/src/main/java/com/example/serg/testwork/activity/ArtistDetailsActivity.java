@@ -57,7 +57,7 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
                 //gif animation download
-                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader9))
+//                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader9))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .crossFade()
                 .into(imageView);
@@ -79,6 +79,7 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         switch (item.getItemId()) {
             case android.R.id.home:
                 this.finish();
+                overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -95,8 +96,16 @@ public class ArtistDetailsActivity extends AppCompatActivity {
     }
 
     @Override
+    public void onBackPressed() {
+        super.onBackPressed();
+        overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
+    }
+
+    @Override
     public void onDestroy() {
         super.onDestroy();
         ButterKnife.unbind(this);
     }
+
+
 }
