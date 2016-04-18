@@ -56,10 +56,11 @@ public class ArtistDetailsActivity extends AppCompatActivity {
 
         Glide.with(getApplicationContext())
                 .load(artist.getCover().getBig())
+//                .placeholder(R.drawable.loader2)
                 //gif animation download
-//                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader9))
+//                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader2))
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade()
+                .crossFade(500)
                 .into(imageView);
 
         typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
