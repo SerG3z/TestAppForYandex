@@ -4,7 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
-import android.support.v7.app.AppCompatActivity;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -16,14 +15,13 @@ import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 
 //import com.squareup.picasso.Picasso;
 
 /**
  * Created by serg on 09.04.16.
  */
-public class ArtistDetailsActivity extends AppCompatActivity {
+public class ArtistDetailsActivity extends BaseActivity {
 
     @Bind(R.id.image_details)
     ImageView imageView;
@@ -45,12 +43,15 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         return intent;
     }
 
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
+    }
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.artist_details);
-        ButterKnife.bind(this);
+        super.onCreate(savedInstanceState);
 
         Artist artist = initIntent(getIntent());
 
@@ -101,12 +102,5 @@ public class ArtistDetailsActivity extends AppCompatActivity {
         super.onBackPressed();
         overridePendingTransition(R.anim.slide_in_right, R.anim.slide_out_right);
     }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
-
 
 }

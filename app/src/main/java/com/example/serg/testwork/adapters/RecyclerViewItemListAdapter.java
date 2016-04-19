@@ -1,12 +1,10 @@
 package com.example.serg.testwork.adapters;
 
 import android.content.Context;
-import android.graphics.drawable.AnimationDrawable;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.view.animation.Animation;
 import android.widget.ImageView;
 import android.widget.TextView;
 
@@ -14,14 +12,14 @@ import com.bumptech.glide.Glide;
 import com.bumptech.glide.load.engine.DiskCacheStrategy;
 import com.example.serg.testwork.R;
 import com.example.serg.testwork.models.Artist;
-//import com.squareup.picasso.Picasso;
 
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 import butterknife.Bind;
 import butterknife.ButterKnife;
+
+//import com.squareup.picasso.Picasso;
 
 /**
  * Created by serg on 09.04.16.
@@ -31,6 +29,14 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
     private List<Artist> dateList;
     private Context context;
     private RecyclerViewItemClickListener itemClickListener;
+    private LayoutInflater layoutInflater;
+
+    public RecyclerViewItemListAdapter(Context context) {
+        super();
+        dateList = new ArrayList<Artist>();
+        this.context = context;
+        this.layoutInflater = LayoutInflater.from(context);
+    }
 
     public void setOnItemClickListener(RecyclerViewItemClickListener myClickListener) {
         this.itemClickListener = myClickListener;
@@ -38,9 +44,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
     @Override
     public Holder onCreateViewHolder(ViewGroup viewGroup, int i) {
-        View view = LayoutInflater.from(viewGroup.getContext())
-                .inflate(R.layout.item_list_name, viewGroup, false);
-        context = viewGroup.getContext();
+        View view = layoutInflater.inflate(R.layout.item_list_name, viewGroup, false);
         Holder Holder = new Holder(view, itemClickListener);
         return Holder;
     }
@@ -72,6 +76,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         return pluralsAlbums + ", " + pluralsTracks;
     }
 
+
     /*
     * function inserts a comma after each world of the input array,
     * except for the last and returns this string
@@ -85,12 +90,6 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
             }
         }
         return builder.toString();
-    }
-
-
-    public RecyclerViewItemListAdapter() {
-        super();
-        dateList = new ArrayList<Artist>();
     }
 
     public void addData(Artist artist) {
@@ -118,6 +117,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         dateList.clear();
         notifyDataSetChanged();
     }
+
     /*
     * returns data from position
     * */
@@ -134,7 +134,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         void onItemClick(int position, View v);
     }
 
-    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener{
+    public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
         @Bind(R.id.item_list_image)
         ImageView imageImageView;
         @Bind(R.id.item_list_name)
@@ -155,7 +155,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
         @Override
         public void onClick(View view) {
-            if (listener != null){
+            if (listener != null) {
                 listener.onItemClick(getPosition(), view);
             }
         }

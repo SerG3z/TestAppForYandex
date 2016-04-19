@@ -3,10 +3,8 @@ package com.example.serg.testwork.activity;
 import android.content.Intent;
 import android.os.Bundle;
 import android.os.Parcelable;
-
 import android.support.v4.app.FragmentManager;
 import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.LinearLayoutManager;
 import android.support.v7.widget.RecyclerView;
 import android.util.Log;
@@ -25,13 +23,12 @@ import java.util.ArrayList;
 import java.util.List;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import rx.Subscriber;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class MainActivity extends AppCompatActivity implements ErrorConnectionFragment.ErrorConnectionFragmentListener {
+public class MainActivity extends BaseActivity implements ErrorConnectionFragment.ErrorConnectionFragmentListener {
 
     private static final String TAG_ERROR_CONNECTION = "error_connection_fragment";
     private static final String SAVE_LISTARTIST_KEY = "save_list_artist";
@@ -42,28 +39,31 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
     SwipeRefreshLayout swipeRefreshLayout;
 
     //    local cache
-    List<Artist> artistListCache = new ArrayList<>();
+    private List<Artist> artistListCache = new ArrayList<>();
 
-    RecyclerViewItemListAdapter adapter;
+    private RecyclerViewItemListAdapter adapter;
     private FragmentManager fragmentManager;
+    private ArtistService service;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
-        ButterKnife.bind(this);
+        super.onCreate(savedInstanceState);
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
         recyclerView.setLayoutManager(layoutManager);
 
-        adapter = new RecyclerViewItemListAdapter();
+        adapter = new RecyclerViewItemListAdapter(getBaseContext());
         fragmentManager = getSupportFragmentManager();
+
+        service = ServiceFactory.createRetrofitService(ArtistService.class,
+                ArtistService.SERVICE_ENDPOINT);
 
         if (savedInstanceState != null) {
             artistListCache = savedInstanceState.getParcelableArrayList(SAVE_LISTARTIST_KEY);
             adapter.addAllData(artistListCache);
         } else {
-            downloadDate();
+            downloadDate(service);
         }
 
 
@@ -85,9 +85,14 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
         swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
             @Override
             public void onRefresh() {
-                downloadDate();
+                downloadDate(service);
             }
         });
+    }
+
+    @Override
+    protected void onDestroy() {
+        super.onDestroy();
     }
 
 
@@ -95,10 +100,8 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
     * downloads data from json and adds data in adapter and local cache
     * if download error and cache is empty, then show error fragment
     * */
-    private void downloadDate() {
+    private void downloadDate(ArtistService service) {
         showIndicationDownload();
-        ArtistService service = ServiceFactory.createRetrofitService(ArtistService.class,
-                ArtistService.SERVICE_ENDPOINT);
         service.getDataArtist()
                 .subscribeOn(Schedulers.newThread())
                 .observeOn(AndroidSchedulers.mainThread())
@@ -138,32 +141,34 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
                     }
 
                     @Override
-                    public void onNext(List<Artist> githubses) {
+                    public void onNext(List<Artist> artists) {
                         adapter.clear();
-                        for (Artist item : githubses) {
-                            adapter.addData(item);
-                        }
+                        adapter.addAllData(artists);
                     }
                 });
     }
 
 
     private void showIndicationDownload() {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(true);
-            }
-        });
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(true);
+                }
+            });
+        }
     }
 
     private void hideIndicationDownload() {
-        swipeRefreshLayout.post(new Runnable() {
-            @Override
-            public void run() {
-                swipeRefreshLayout.setRefreshing(false);
-            }
-        });
+        if (swipeRefreshLayout != null) {
+            swipeRefreshLayout.post(new Runnable() {
+                @Override
+                public void run() {
+                    swipeRefreshLayout.setRefreshing(false);
+                }
+            });
+        }
     }
 
     /*
@@ -196,13 +201,7 @@ public class MainActivity extends AppCompatActivity implements ErrorConnectionFr
     }
 
     @Override
-    protected void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
-    }
-
-    @Override
     public void onErrorConnectiontClicked() {
-        downloadDate();
+        downloadDate(service);
     }
 }

@@ -8,7 +8,7 @@ import butterknife.ButterKnife;
 
 /**
  * Created by serg3z on 19.04.16.
- *
+ * <p/>
  * This Activity contains repeating code
  */
 
