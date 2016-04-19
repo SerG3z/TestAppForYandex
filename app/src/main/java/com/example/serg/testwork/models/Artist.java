@@ -3,19 +3,29 @@ package com.example.serg.testwork.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 import java.util.List;
 
 /**
  * Created by serg on 09.04.16.
  */
 public class Artist implements Parcelable {
+    @SerializedName("id")
     private int id;
+    @SerializedName("name")
     private String name;
+    @SerializedName("genres")
     private String[] genres;
+    @SerializedName("tracks")
     private int tracks;
+    @SerializedName("albums")
     private int albums;
+    @SerializedName("link")
     private String link;
+    @SerializedName("description")
     private String description;
+    @SerializedName("cover")
     private Cover cover;
 
     public int getId() {

@@ -3,11 +3,15 @@ package com.example.serg.testwork.models;
 import android.os.Parcel;
 import android.os.Parcelable;
 
+import com.google.gson.annotations.SerializedName;
+
 /**
  * Created by serg on 09.04.16.
  */
 public class Cover implements Parcelable {
+    @SerializedName("small")
     private String small;
+    @SerializedName("big")
     private String big;
 
     public String getSmall() {
