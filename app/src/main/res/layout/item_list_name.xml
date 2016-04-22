@@ -40,6 +40,6 @@
         android:text="@string/info"
         android:layout_marginTop="33dp"
         android:layout_below="@id/item_list_type"
-        android:layout_alignLeft="@+id/item_list_type" />
+        android:layout_alignLeft="@id/item_list_type" />
 
 </RelativeLayout>

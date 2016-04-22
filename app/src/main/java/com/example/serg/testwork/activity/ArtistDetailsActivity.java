@@ -4,6 +4,8 @@ import android.content.Context;
 import android.content.Intent;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
+import android.support.design.widget.FloatingActionButton;
+import android.support.v7.widget.Toolbar;
 import android.view.MenuItem;
 import android.widget.ImageView;
 import android.widget.TextView;
@@ -31,6 +33,10 @@ public class ArtistDetailsActivity extends BaseActivity {
     TextView typeInfo;
     @Bind(R.id.biography_info_details)
     TextView biographyInfo;
+//    @Bind(R.id.floating_button)
+//    FloatingActionButton floatingActionButton;
+    @Bind(R.id.toolbar)
+    Toolbar toolbar;
 
     private static final String ARTIST_DATA_KEY = "artist_data";
 
@@ -50,29 +56,29 @@ public class ArtistDetailsActivity extends BaseActivity {
 
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
-        setContentView(R.layout.artist_details);
+        setContentView(R.layout.artist_details_scrolling);
         super.onCreate(savedInstanceState);
+        setSupportActionBar(toolbar);
+        getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
         Artist artist = initIntent(getIntent());
+        if (artist != null) {
 
-        Glide.with(getApplicationContext())
-                .load(artist.getCover().getBig())
+            toolbar.setTitle(artist.getName());
+
+            Glide.with(getApplicationContext())
+                    .load(artist.getCover().getBig())
 //                .placeholder(R.drawable.loader2)
-                //gif animation download
+                    //gif animation download
 //                .thumbnail(Glide.with(getApplicationContext()).load(R.drawable.loader2))
-                .diskCacheStrategy(DiskCacheStrategy.ALL)
-                .crossFade(500)
-                .into(imageView);
+                    .diskCacheStrategy(DiskCacheStrategy.ALL)
+                    .crossFade(500)
+                    .into(imageView);
 
-        typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
-        typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(
-                getApplicationContext(), artist.getAlbums(), artist.getTracks(), false));
-        biographyInfo.setText(artist.getDescription());
-
-        android.support.v7.app.ActionBar actionBar = getSupportActionBar();
-        if (actionBar != null) {
-            actionBar.setDisplayHomeAsUpEnabled(true);
-            actionBar.setTitle(artist.getName());
+            typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
+            typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(
+                    getApplicationContext(), artist.getAlbums(), artist.getTracks(), false));
+            biographyInfo.setText(artist.getDescription());
         }
     }
 

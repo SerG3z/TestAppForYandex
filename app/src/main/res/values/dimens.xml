@@ -23,4 +23,6 @@
     <dimen name="text_size_error">18dp</dimen>
     <dimen name="top_margin_linear_layout">150dp</dimen>
 
+    <dimen name="fab_margin">16dp</dimen>
+
 </resources>
