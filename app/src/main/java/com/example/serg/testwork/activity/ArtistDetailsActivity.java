@@ -66,7 +66,7 @@ public class ArtistDetailsActivity extends BaseActivity {
 
         typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
         typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(
-                getApplicationContext(), artist.getAlbums(), artist.getTracks()));
+                getApplicationContext(), artist.getAlbums(), artist.getTracks(), false));
         biographyInfo.setText(artist.getDescription());
 
         android.support.v7.app.ActionBar actionBar = getSupportActionBar();

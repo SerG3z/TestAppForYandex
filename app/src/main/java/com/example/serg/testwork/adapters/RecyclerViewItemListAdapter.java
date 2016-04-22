@@ -63,17 +63,21 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
         holder.typeTextView.setText(getStringGenres(dataArtist.getGenres()));
         holder.infoTextView.setText(getStringAlbumsAndTrack(
-                context, dataArtist.getAlbums(), dataArtist.getTracks()));
+                context, dataArtist.getAlbums(), dataArtist.getTracks(), true));
 
     }
 
     /*
     * selects the correct declination and returns this string
     * */
-    public static String getStringAlbumsAndTrack(Context context, int countAlbums, int countTracks) {
+    public static String getStringAlbumsAndTrack(Context context, int countAlbums, int countTracks, boolean typeDelimiter) {
         String pluralsAlbums = context.getResources().getQuantityString(R.plurals.plurals_albums, countAlbums, countAlbums);
         String pluralsTracks = context.getResources().getQuantityString(R.plurals.plurals_tracks, countTracks, countTracks);
-        return pluralsAlbums + ", " + pluralsTracks;
+        if (typeDelimiter) {
+            return pluralsAlbums + ", " + pluralsTracks;
+        } else {
+            return pluralsAlbums + "  •  " + pluralsTracks;
+        }
     }
 
 
