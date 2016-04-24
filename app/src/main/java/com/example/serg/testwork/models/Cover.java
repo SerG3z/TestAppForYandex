@@ -5,10 +5,12 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
+
 /**
  * Created by serg on 09.04.16.
  */
-public class Cover implements Parcelable {
+public class Cover implements Parcelable, Serializable {
     @SerializedName("small")
     private String small;
     @SerializedName("big")

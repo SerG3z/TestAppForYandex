@@ -5,12 +5,13 @@ import android.os.Parcelable;
 
 import com.google.gson.annotations.SerializedName;
 
+import java.io.Serializable;
 import java.util.List;
 
 /**
  * Created by serg on 09.04.16.
  */
-public class Artist implements Parcelable {
+public class Artist implements Parcelable, Serializable {
     @SerializedName("id")
     private int id;
     @SerializedName("name")

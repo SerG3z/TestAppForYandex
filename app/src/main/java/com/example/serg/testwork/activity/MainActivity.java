@@ -26,6 +26,7 @@ import com.example.serg.testwork.R;
 import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.decoration.DividerItemDecoration;
 import com.example.serg.testwork.fragments.ErrorConnectionFragment;
+import com.example.serg.testwork.manager.Cache;
 import com.example.serg.testwork.models.Artist;
 import com.example.serg.testwork.service.ArtistService;
 import com.example.serg.testwork.service.ServiceFactory;
@@ -51,7 +52,7 @@ public class MainActivity extends BaseActivity
     SwipeRefreshLayout swipeRefreshLayout;
 
     //    local cache
-    private List<Artist> artistListCache = new ArrayList<>();
+    private ArrayList<Artist> artistListCache = new ArrayList<>();
 
     private RecyclerViewItemListAdapter adapter;
     private FragmentManager fragmentManager;
@@ -142,6 +143,7 @@ public class MainActivity extends BaseActivity
 //                        updated local cache
                         artistListCache.clear();
                         artistListCache.addAll(adapter.getAllData());
+                        Cache.writeToCache(artistListCache, getApplicationContext());
                         //stop animation downloads
                         hideIndicationDownload();
                         Toast.makeText(getApplicationContext(),
@@ -159,6 +161,7 @@ public class MainActivity extends BaseActivity
                         /*
                         * if local cache isn't empty
                         * */
+                        artistListCache = Cache.readFromCache(getApplicationContext());
                         if (artistListCache.size() > 0) {
                             adapter.addAllData(artistListCache);
                             Toast.makeText(getApplicationContext(),

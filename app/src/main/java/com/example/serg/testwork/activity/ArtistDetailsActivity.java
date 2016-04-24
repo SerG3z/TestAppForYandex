@@ -9,6 +9,7 @@ import android.graphics.drawable.Drawable;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Bundle;
+import android.os.Parcelable;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
 import android.support.v4.content.ContextCompat;
@@ -58,7 +59,7 @@ public class ArtistDetailsActivity extends BaseActivity {
     * */
     public static Intent newIntent(Context context, Artist artist, Bitmap bitmap) {
         Intent intent = new Intent(context, ArtistDetailsActivity.class);
-        intent.putExtra(ARTIST_DATA_KEY, artist);
+        intent.putExtra(ARTIST_DATA_KEY, (Parcelable) artist);
         intent.putExtra(IMAGE_ARTIST_KEY, bitmap);
         return intent;
     }
@@ -123,18 +124,16 @@ public class ArtistDetailsActivity extends BaseActivity {
     public boolean onOptionsItemSelected(MenuItem item) {
         switch (item.getItemId()) {
             case android.R.id.home:
-//                this.finish();
+                onBackPressed();
             default:
                 return super.onOptionsItemSelected(item);
         }
     }
-
 
     private void initIntent(Intent intent) {
         if (intent != null) {
             artist = intent.getParcelableExtra(ARTIST_DATA_KEY);
             imageArtist = intent.getParcelableExtra(IMAGE_ARTIST_KEY);
         }
-
     }
 }
