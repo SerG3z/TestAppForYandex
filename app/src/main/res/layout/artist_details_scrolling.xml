@@ -24,12 +24,11 @@
             <ImageView
                 android:id="@+id/image_details"
                 android:layout_width="match_parent"
-                android:layout_height="@dimen/avatar_height"
-                android:minHeight="@dimen/avatar_height"
+                android:layout_height="wrap_content"
                 android:fitsSystemWindows="true"
-                android:padding="50dp"
-                android:transitionName="@string/image_trans"
-                android:src="@android:mipmap/sym_def_app_icon" />
+                android:minHeight="@dimen/avatar_height"
+                android:src="@android:mipmap/sym_def_app_icon"
+                android:transitionName="@string/image_trans" />
 
             <android.support.v7.widget.Toolbar
                 android:id="@+id/toolbar"
@@ -47,31 +46,63 @@
         app:layout_behavior="@string/appbar_scrolling_view_behavior">
 
         <LinearLayout
-            android:layout_width="fill_parent"
+            android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/music_details"
-                android:layout_width="wrap_content"
+            <GridLayout
+                android:layout_width="fill_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/left_margin_details"
-                android:layout_marginTop="@dimen/top_margin_details"
-                android:text="text text text text text text text text " />
+                android:columnCount="2"
+                android:orientation="vertical">
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="@dimen/left_margin_details"
+                    android:layout_row="0"
+                    android:src="@drawable/music_circle" />
+
+                <TextView
+                    android:id="@+id/music_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_marginLeft="@dimen/left_margin_details"
+                    android:layout_marginTop="@dimen/top_margin_details"
+                    android:layout_row="0"
+                    android:text="text text text text text text text text " />
+
+                <ImageView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="0"
+                    android:layout_gravity="bottom"
+                    android:layout_marginLeft="@dimen/left_margin_details"
+                    android:layout_row="1"
+                    android:src="@drawable/library_music" />
+
+                <TextView
+                    android:id="@+id/info_details"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_column="1"
+                    android:layout_marginLeft="@dimen/left_margin_details"
+                    android:layout_marginTop="@dimen/top_margin_details"
+                    android:layout_row="1"
+                    android:text="text text text text text text text text " />
+
+            </GridLayout>
 
             <TextView
-                android:id="@+id/info_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:layout_marginLeft="@dimen/left_margin_details"
                 android:layout_marginTop="@dimen/top_margin_details"
-                android:text="text text text text text text text text " />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginLeft="@dimen/left_margin_details"
-                android:layout_marginTop="@dimen/top_margin_details"
+                android:layout_row="3"
                 android:text="@string/title_biografy"
                 android:textColor="@android:color/black"
                 android:textSize="@dimen/size_text_biografy" />
@@ -80,10 +111,12 @@
                 android:id="@+id/biography_info_details"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
+                android:layout_column="0"
                 android:layout_marginBottom="@dimen/bottom_margin_list_view"
                 android:layout_marginLeft="@dimen/left_margin_details"
                 android:layout_marginRight="@dimen/right_margin_details"
                 android:layout_marginTop="@dimen/top_margin_off_title_biografy"
+                android:layout_row="4"
                 android:text="text text text text text text text text "
                 android:textColor="@android:color/black" />
 
@@ -95,7 +128,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_margin="@dimen/fab_margin"
-        android:src="@android:drawable/sym_action_email"
+        android:src="@drawable/google_chrome"
         app:layout_anchor="@id/app_bar"
         app:layout_anchorGravity="bottom|end" />
 

@@ -81,7 +81,7 @@ public class ArtistDetailsActivity extends BaseActivity {
 
             toolbar.setTitle(artist.getName());
 
-            imageView.setPadding(0, 0, 0, 0);
+//            imageView.setPadding(0, 0, 0, 0);
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
 
             Drawable drawable = new BitmapDrawable(imageArtist);

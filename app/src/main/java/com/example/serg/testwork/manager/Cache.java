@@ -6,6 +6,7 @@ import com.example.serg.testwork.models.Artist;
 
 import java.io.File;
 import java.io.FileInputStream;
+import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
@@ -39,9 +40,8 @@ public class Cache {
 
     }
 
-    public static ArrayList<Artist> readFromCache(Context context) {
+    public static ArrayList<Artist> readFromCache(Context context) throws IOException, ClassNotFoundException {
 
-        try {
             FileInputStream inputStream = new FileInputStream(context.getExternalCacheDir() + nameFile);
             ObjectInputStream objectInputStream = new ObjectInputStream(inputStream);
             int count = objectInputStream.readInt();
@@ -51,9 +51,5 @@ public class Cache {
             }
             objectInputStream.close();
             return artists;
-        } catch (Exception e) {
-            e.printStackTrace();
-            return null;
-        }
     }
 }

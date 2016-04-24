@@ -161,14 +161,19 @@ public class MainActivity extends BaseActivity
                         /*
                         * if local cache isn't empty
                         * */
-                        artistListCache = Cache.readFromCache(getApplicationContext());
-                        if (artistListCache.size() > 0) {
-                            adapter.addAllData(artistListCache);
-                            Toast.makeText(getApplicationContext(),
-                                    R.string.text_toast_error,
-                                    Toast.LENGTH_SHORT).show();
-                        } else {
-                            addErrorConnection();
+                        try {
+                            artistListCache = Cache.readFromCache(getApplicationContext());
+                        } catch (Exception ex) {
+
+                        } finally {
+                            if (artistListCache.size() > 0) {
+                                adapter.addAllData(artistListCache);
+                                Toast.makeText(getApplicationContext(),
+                                        R.string.text_toast_error,
+                                        Toast.LENGTH_SHORT).show();
+                            } else {
+                                addErrorConnection();
+                            }
                         }
                     }
 
