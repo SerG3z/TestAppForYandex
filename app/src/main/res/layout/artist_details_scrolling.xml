@@ -1,6 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<android.support.design.widget.CoordinatorLayout
-    xmlns:android="http://schemas.android.com/apk/res/android"
+<android.support.design.widget.CoordinatorLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
@@ -25,9 +24,11 @@
             <ImageView
                 android:id="@+id/image_details"
                 android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:adjustViewBounds="true"
+                android:layout_height="@dimen/avatar_height"
+                android:minHeight="@dimen/avatar_height"
                 android:fitsSystemWindows="true"
+                android:padding="50dp"
+                android:transitionName="@string/image_trans"
                 android:src="@android:mipmap/sym_def_app_icon" />
 
             <android.support.v7.widget.Toolbar
@@ -35,7 +36,7 @@
                 android:layout_width="match_parent"
                 android:layout_height="?attr/actionBarSize"
                 app:layout_collapseMode="pin"
-                app:popupTheme="@style/AppTheme.PopupOverlay" />
+                app:popupTheme="@style/AppTheme.AppBarOverlay" />
 
         </android.support.design.widget.CollapsingToolbarLayout>
     </android.support.design.widget.AppBarLayout>
@@ -81,8 +82,8 @@
                 android:layout_height="wrap_content"
                 android:layout_marginBottom="@dimen/bottom_margin_list_view"
                 android:layout_marginLeft="@dimen/left_margin_details"
-                android:layout_marginTop="@dimen/top_margin_off_title_biografy"
                 android:layout_marginRight="@dimen/right_margin_details"
+                android:layout_marginTop="@dimen/top_margin_off_title_biografy"
                 android:text="text text text text text text text text "
                 android:textColor="@android:color/black" />
 
@@ -96,7 +97,6 @@
         android:layout_margin="@dimen/fab_margin"
         android:src="@android:drawable/sym_action_email"
         app:layout_anchor="@id/app_bar"
-        app:layout_anchorGravity="bottom|end"
-        />
+        app:layout_anchorGravity="bottom|end" />
 
 </android.support.design.widget.CoordinatorLayout>

@@ -1,6 +1,7 @@
 package com.example.serg.testwork.adapters;
 
 import android.content.Context;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -55,7 +56,8 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
 
         Glide.with(context)
                 .load(dataArtist.getCover().getSmall())
-                .thumbnail(Glide.with(context).load(R.drawable.loader3))
+                .asBitmap()
+                .placeholder(R.drawable.artist)
                 .diskCacheStrategy(DiskCacheStrategy.ALL)
                 .into(holder.imageImageView);
 
@@ -139,7 +141,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
     }
 
     public class Holder extends RecyclerView.ViewHolder implements View.OnClickListener {
-        @Bind(R.id.item_list_image)
+        @Bind(R.id.image_details)
         ImageView imageImageView;
         @Bind(R.id.item_list_name)
         TextView nameTextView;
@@ -160,7 +162,7 @@ public class RecyclerViewItemListAdapter extends RecyclerView.Adapter<RecyclerVi
         @Override
         public void onClick(View view) {
             if (listener != null) {
-                listener.onItemClick(getPosition(), view);
+                listener.onItemClick(getAdapterPosition(), view);
             }
         }
     }

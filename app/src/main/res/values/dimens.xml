@@ -24,5 +24,6 @@
     <dimen name="top_margin_linear_layout">150dp</dimen>
 
     <dimen name="fab_margin">16dp</dimen>
+    <dimen name="avatar_height">300dp</dimen>
 
 </resources>

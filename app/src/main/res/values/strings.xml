@@ -12,6 +12,9 @@
     <string name="text_toast_download_complete">Данные обновлены</string>
     <string name="text_error">Связь с сервером потеряна. Нажмите, чтобы повторить</string>
     <string name="text_button_repeat">повторить</string>
+    <string name="error_link">К сожалению ссылка на сайт отсутсвует.</string>
+
+    <string name="image_trans">trans_image</string>
 
     <plurals name="plurals_tracks">
         <item quantity="zero">нет песен</item>
