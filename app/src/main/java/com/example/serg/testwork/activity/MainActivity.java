@@ -1,10 +1,10 @@
 package com.example.serg.testwork.activity;
 
+import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.os.Parcelable;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.Toolbar;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -15,6 +15,7 @@ import com.example.serg.testwork.fragments.ErrorConnectionFragment;
 import com.example.serg.testwork.manager.Cache;
 import com.example.serg.testwork.models.Artist;
 import com.example.serg.testwork.service.ArtistService;
+import com.example.serg.testwork.service.MusicInputReceiver;
 import com.example.serg.testwork.service.ServiceFactory;
 
 import java.util.ArrayList;
@@ -44,16 +45,14 @@ public class MainActivity extends BaseActivity
     private FragmentManager fragmentManager;
     private ArtistService service;
 
-    ArtistListFragment artistListFragment;
-
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
-//        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-//        toolbar.setTitle(R.string.app_name);
-//        setSupportActionBar(toolbar);
+        MusicInputReceiver musicInputReceiver = new MusicInputReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(musicInputReceiver, filter);
 
         fragmentManager = getSupportFragmentManager();
 
@@ -158,6 +157,7 @@ public class MainActivity extends BaseActivity
         ErrorConnectionFragment errorConnectionFragment = ErrorConnectionFragment.newInstance();
         fragmentManager.beginTransaction()
                 .replace(R.id.container, errorConnectionFragment, TAG_ERROR_CONNECTION)
+                .addToBackStack("stack")
                 .commit();
     }
 
@@ -183,10 +183,10 @@ public class MainActivity extends BaseActivity
     @Override
     public void onListAtristClicked(int indexClikArtist) {
 
-
         ArtistDetailsFragment artistDetailsFragment = ArtistDetailsFragment.newInstance(mainListArtist.get(indexClikArtist));
 
         fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
                 .replace(R.id.main_container, artistDetailsFragment, TAG_DETAILS_FRAGMENT)
                 .addToBackStack("stack")
                 .commit();

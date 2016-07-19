@@ -72,11 +72,18 @@ public class ArtistDetailsFragment extends Fragment {
         super.onViewCreated(view, savedInstanceState);
         Context context = getActivity().getApplicationContext();
 
-
         Bundle bundle = getArguments();
         if (bundle != null) {
             artist = bundle.getParcelable(KEY_PARCELABLE_DATA);
         }
+
+        toolbar.setNavigationOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                getActivity().getSupportFragmentManager()
+                        .popBackStack();
+            }
+        });
 
         if (artist != null) {
 
@@ -97,6 +104,7 @@ public class ArtistDetailsFragment extends Fragment {
         }
 
     }
+
 
     @OnClick(R.id.floating_button)
     public void onClickFloatingActionButton(View view) {

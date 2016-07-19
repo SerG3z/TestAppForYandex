@@ -34,9 +34,27 @@
         <item quantity="other">%1$d альбомов</item>
     </plurals>
 
+    <integer name="card_flip_duration_full">1000</integer>
+    <integer name="card_flip_duration_half">500</integer>
 
+    <string name="about_app">О программе</string>
+    <string name="feedback">Обратная связь</string>
 
+    //intent for send mail
+    <string-array name="my_email">sergey.atroshchenko@yandex.ru</string-array>
+    <string name="email_subject">Обратная связь</string>
+    <string name="email_text">Само письмо</string>
+    <string name="email_title">Отправить email</string>
+    <string name="email_title_error">К сожалению у вас отсутствует почтовый клиент</string>
+    <string name="dialog_message">Тестовое приложение для школы Android разработчиков от компании Яндекс.</string>
+    <string name="dialog_title">О приложении</string>
+    <string name="ok">ок</string>
 
+    //notification
+    <string name="content_title">Исполнители</string>
+    <string name="content_text">Выберите приложение</string>
+    <string name="button_title_music">Музыка</string>
+    <string name="button_title_radio">Радио</string>
 
 
 </resources>
