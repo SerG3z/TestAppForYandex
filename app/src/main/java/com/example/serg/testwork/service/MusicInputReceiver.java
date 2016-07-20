@@ -11,6 +11,7 @@ import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.support.v4.app.TaskStackBuilder;
 import android.support.v7.app.NotificationCompat;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 
 import com.example.serg.testwork.R;
@@ -26,6 +27,8 @@ public class MusicInputReceiver extends BroadcastReceiver {
     private static final String TAG = "BROADCAST_INPUT_MUSIC";
     private final static String YANDEX_MUSIC_PACKAGE = "ru.yandex.music";
     private final static String YANDEX_RADIO_PACKAGE = "ru.yandex.radio";
+
+    private NotificationManager notificationManager;
 
     @Override
     public void onReceive(Context context, Intent intent) {
@@ -57,6 +60,7 @@ public class MusicInputReceiver extends BroadcastReceiver {
 
             Bitmap longIconNotif = BitmapFactory.decodeResource(context.getResources(),
                     R.drawable.music_icon);
+
             android.support.v4.app.NotificationCompat.Builder mBuilder =
                     new NotificationCompat.Builder(context)
                             .setSmallIcon(R.drawable.music_circle)
@@ -69,13 +73,19 @@ public class MusicInputReceiver extends BroadcastReceiver {
                             .addAction(R.drawable.radio_tower, context.getResources().getString(R.string.button_title_radio),
                                     PendingIntent.getActivity(context, 0, radio, 0));
 
-            NotificationManager notificationManager =
+            notificationManager =
                     (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
+
+            if (!PreferenceManager.getDefaultSharedPreferences(context)
+                    .getBoolean(context.getString(R.string.preference_notify), true)) {
+                closeNotify();
+                return;
+            }
 
             switch (state) {
                 case 0:
                     Log.d(TAG, "Headset is unplugged");
-                    notificationManager.cancel(0);
+                    closeNotify();
                     break;
                 case 1:
                     Log.d(TAG, "Headset is plugged");
@@ -85,10 +95,15 @@ public class MusicInputReceiver extends BroadcastReceiver {
                     break;
                 default:
                     Log.d(TAG, "I have no idea what the headset state is");
-                    notificationManager.cancel(0);
+                    closeNotify();
             }
         }
     }
+
+    public void closeNotify() {
+        notificationManager.cancel(0);
+    }
+
 
 
 }

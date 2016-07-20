@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="utf-8"?>
-<resources>
+<resources xmlns:xliff="http://schemas.android.com/tools">
 
     <string name="app_name">Исполнители</string>
 
@@ -55,6 +55,11 @@
     <string name="content_text">Выберите приложение</string>
     <string name="button_title_music">Музыка</string>
     <string name="button_title_radio">Радио</string>
+    <string name="switch_title">Push-уведомления</string>
+    <string name="settings_title">Настройки</string>
+    <string name="category_notify">Уведомления</string>
+
+    <string name="preference_notify"><xliff:g id="preference_key">preference_notify_key</xliff:g></string>
 
 
 </resources>
