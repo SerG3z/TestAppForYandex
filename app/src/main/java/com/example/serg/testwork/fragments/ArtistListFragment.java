@@ -86,6 +86,7 @@ public class ArtistListFragment extends Fragment {
 
         Bundle bundle = getArguments();
         if (bundle != null) {
+            artistArrayList.clear();
             artistArrayList.addAll(bundle.<Artist>getParcelableArrayList(KEY_PARCELABLE_LIST));
         }
 
@@ -96,8 +97,6 @@ public class ArtistListFragment extends Fragment {
 
         adapter.addAllData(artistArrayList);
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(context,
-                LinearLayoutManager.VERTICAL));
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);
 
@@ -105,6 +104,9 @@ public class ArtistListFragment extends Fragment {
         scaleInAnimationAdapter.setInterpolator(new OvershootInterpolator());
 
         recyclerView.setAdapter(scaleInAnimationAdapter);
+
+        recyclerView.addItemDecoration(new DividerItemDecoration(context,
+                LinearLayoutManager.VERTICAL));
 
         adapter.setOnItemClickListener(new RecyclerViewItemListAdapter
                 .RecyclerViewItemClickListener() {
@@ -172,6 +174,9 @@ public class ArtistListFragment extends Fragment {
                 AlertDialog dialog = builder.create();
                 dialog.show();
                 return true;
+            case R.id.menu_item_settings:
+                fragmentListener.onSettingsClicked();
+                return true;
             default:
                 return super.onOptionsItemSelected(item);
         }
@@ -189,7 +194,9 @@ public class ArtistListFragment extends Fragment {
         ButterKnife.unbind(this);
     }
 
+
     public interface ListArtistFragmentListener {
+        void onSettingsClicked();
         void onListAtristClicked(int indexClickArtist);
     }
 }
