@@ -26,6 +26,7 @@ import java.util.ArrayList;
 import java.util.List;
 
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
@@ -46,6 +47,7 @@ public class MainActivity extends AppCompatActivity
     private FragmentManager fragmentManager;
     private ArtistService service;
     private MusicInputReceiver musicInputReceiver;
+    private Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -68,7 +70,7 @@ public class MainActivity extends AppCompatActivity
             mainListArtist.addAll(artistListCache);
 
         } else {
-            downloadDate(service);
+            downloadData(service);
         }
     }
 
@@ -91,18 +93,26 @@ public class MainActivity extends AppCompatActivity
     }
 
     @Override
+    protected void onPause() {
+        super.onPause();
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
+    }
+
+    @Override
     protected void onDestroy() {
         super.onDestroy();
         removeMusicInputReceiver();
     }
 
-    /*
+    /**
      * downloads data from json and adds data in adapter and local cache
      * if download error and cache is empty, then show error fragment
-     * */
-    private void downloadDate(ArtistService service) {
-        service.getDataArtist()
-                .subscribeOn(Schedulers.newThread())
+     */
+    private void downloadData(ArtistService service) {
+        subscription = service.getDataArtist()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Artist>>() {
 
@@ -124,7 +134,6 @@ public class MainActivity extends AppCompatActivity
                     @Override
                     public final void onError(Throwable e) {
                         Log.e(LOG_TAG, e.getMessage());
-
                         /*
                         * if local cache isn't empty
                         * */
@@ -136,9 +145,7 @@ public class MainActivity extends AppCompatActivity
                             if (artistListCache.size() > 0) {
                                 //хватаем данные из кэша
                                 mainListArtist.addAll(artistListCache);
-
                                 addFragmentListArtist();
-
                                 Toast.makeText(getApplicationContext(),
                                         R.string.text_toast_error,
                                         Toast.LENGTH_SHORT).show();
@@ -194,7 +201,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onErrorConnectiontClicked() {
-        downloadDate(service);
+        downloadData(service);
     }
 
     @Override

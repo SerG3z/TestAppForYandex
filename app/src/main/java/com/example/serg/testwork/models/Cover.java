@@ -35,7 +35,7 @@ public class Cover implements Parcelable, Serializable {
         parcel.writeString(big);
     }
 
-    protected Cover(Parcel in) {
+    private Cover(Parcel in) {
         small = in.readString();
         big = in.readString();
     }

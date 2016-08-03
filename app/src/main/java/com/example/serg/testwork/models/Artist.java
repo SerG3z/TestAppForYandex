@@ -6,7 +6,6 @@ import android.os.Parcelable;
 import com.google.gson.annotations.SerializedName;
 
 import java.io.Serializable;
-import java.util.List;
 
 /**
  * Created by serg on 09.04.16.
@@ -78,7 +77,7 @@ public class Artist implements Parcelable, Serializable {
         parcel.writeParcelable(cover, 1);
     }
 
-    protected Artist(Parcel in) {
+    private Artist(Parcel in) {
         id = in.readInt();
         name = in.readString();
         genres = in.createStringArray();

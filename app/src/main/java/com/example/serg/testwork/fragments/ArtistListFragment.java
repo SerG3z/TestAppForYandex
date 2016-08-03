@@ -35,23 +35,20 @@ import jp.wasabeef.recyclerview.adapters.ScaleInAnimationAdapter;
  * Created by user on 16.07.16.
  */
 
+
 public class ArtistListFragment extends BaseFragment {
 
     public interface ListArtistFragmentListener {
         void onSettingsClicked();
-
         void onListAtristClicked(int indexClickArtist);
     }
 
     private static final String KEY_PARCELABLE_LIST = "parcelable_list";
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
     @Bind(R.id.first_recycler_view)
     RecyclerView recyclerView;
     private ListArtistFragmentListener fragmentListener;
-    private RecyclerViewItemListAdapter adapter;
-
     private ArrayList<Artist> artistArrayList = new ArrayList<>();
 
     public static ArtistListFragment newInstance(ArrayList<Artist> list) {
@@ -90,7 +87,7 @@ public class ArtistListFragment extends BaseFragment {
 
         final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(context);
         recyclerView.setLayoutManager(layoutManager);
-        adapter = new RecyclerViewItemListAdapter(context);
+        RecyclerViewItemListAdapter adapter = new RecyclerViewItemListAdapter(context);
         adapter.addAllData(artistArrayList);
 
         ScaleInAnimationAdapter scaleInAnimationAdapter = new ScaleInAnimationAdapter(adapter);

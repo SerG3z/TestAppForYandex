@@ -30,6 +30,9 @@ import butterknife.OnClick;
 
 public class ArtistDetailsFragment extends BaseFragment {
 
+    private static final String CUSTOM_SESSION = "android.support.customtabs.extra.SESSION";
+    private static final String TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
+    private static final String KEY_PARCELABLE_DATA = "parcelable_data";
     @Bind(R.id.image_details)
     ImageView imageView;
     @Bind(R.id.music_details)
@@ -40,17 +43,10 @@ public class ArtistDetailsFragment extends BaseFragment {
     TextView biographyInfo;
     @Bind(R.id.toolbar)
     Toolbar toolbar;
-
-    private static final String CUSTOM_SESSION = "android.support.customtabs.extra.SESSION";
-    private static final String TOOLBAR_COLOR = "android.support.customtabs.extra.TOOLBAR_COLOR";
-    private static final String KEY_PARCELABLE_DATA = "parcelable_data";
-
     private Artist artist;
 
     public static ArtistDetailsFragment newInstance(Artist artist) {
-
         Bundle args = new Bundle();
-
         ArtistDetailsFragment fragment = new ArtistDetailsFragment();
         fragment.setArguments(args);
         args.putParcelable(KEY_PARCELABLE_DATA, artist);
@@ -82,17 +78,13 @@ public class ArtistDetailsFragment extends BaseFragment {
         });
 
         if (artist != null) {
-
             toolbar.setTitle(artist.getName());
-
             imageView.setScaleType(ImageView.ScaleType.CENTER_CROP);
-
             Glide.with(context)
                     .load(artist.getCover().getBig())
                     .diskCacheStrategy(DiskCacheStrategy.ALL)
                     .dontAnimate()
                     .into(imageView);
-
             typeMusic.setText(RecyclerViewItemListAdapter.getStringGenres(artist.getGenres()));
             typeInfo.setText(RecyclerViewItemListAdapter.getStringAlbumsAndTrack(context,
                     artist.getAlbums(), artist.getTracks(), false));
