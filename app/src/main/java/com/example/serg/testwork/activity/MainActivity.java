@@ -1,76 +1,65 @@
 package com.example.serg.testwork.activity;
 
+import android.content.Context;
 import android.content.Intent;
-import android.graphics.Bitmap;
-import android.graphics.drawable.BitmapDrawable;
-import android.graphics.drawable.Drawable;
-import android.graphics.drawable.LayerDrawable;
-import android.os.Build;
+import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
-import android.provider.ContactsContract;
-import android.support.v4.app.ActivityOptionsCompat;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
-import android.support.v4.util.Pair;
-import android.support.v4.widget.SwipeRefreshLayout;
-import android.support.v7.widget.LinearLayoutManager;
-import android.support.v7.widget.RecyclerView;
-import android.support.v7.widget.Toolbar;
+import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
-import android.view.View;
-import android.widget.ImageView;
 import android.widget.Toast;
 
-import com.bumptech.glide.load.resource.bitmap.GlideBitmapDrawable;
 import com.example.serg.testwork.R;
-import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
-import com.example.serg.testwork.decoration.DividerItemDecoration;
+import com.example.serg.testwork.fragments.ArtistDetailsFragment;
+import com.example.serg.testwork.fragments.ArtistListFragment;
 import com.example.serg.testwork.fragments.ErrorConnectionFragment;
+import com.example.serg.testwork.fragments.SettingFragment;
 import com.example.serg.testwork.manager.Cache;
 import com.example.serg.testwork.models.Artist;
 import com.example.serg.testwork.service.ArtistService;
+import com.example.serg.testwork.service.MusicInputReceiver;
 import com.example.serg.testwork.service.ServiceFactory;
 
 import java.util.ArrayList;
 import java.util.List;
 
-import butterknife.Bind;
 import rx.Subscriber;
+import rx.Subscription;
 import rx.android.schedulers.AndroidSchedulers;
 import rx.schedulers.Schedulers;
 
 
-public class MainActivity extends BaseActivity
-        implements ErrorConnectionFragment.ErrorConnectionFragmentListener {
+public class MainActivity extends AppCompatActivity
+        implements ErrorConnectionFragment.ErrorConnectionFragmentListener,
+        ArtistListFragment.ListArtistFragmentListener {
 
     private static final String TAG_ERROR_CONNECTION = "error_connection_fragment";
     private static final String SAVE_LISTARTIST_KEY = "save_list_artist";
     private static final String LOG_TAG = "Error download";
-    @Bind(R.id.first_recycler_view)
-    RecyclerView recyclerView;
-    @Bind(R.id.swipe_refresh_layout)
-    SwipeRefreshLayout swipeRefreshLayout;
 
-    //    local cache
+    // local cache
     private ArrayList<Artist> artistListCache = new ArrayList<>();
+    // main data
+    private ArrayList<Artist> mainListArtist = new ArrayList<>();
 
-    private RecyclerViewItemListAdapter adapter;
     private FragmentManager fragmentManager;
     private ArtistService service;
+    private MusicInputReceiver musicInputReceiver;
+    private Subscription subscription;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
-        Toolbar toolbar = (Toolbar) findViewById(R.id.main_toolbar);
-        toolbar.setTitle(R.string.app_name);
-        setSupportActionBar(toolbar);
+        if (getPreferenceNotification(getApplicationContext())) {
+            addMusicInputReceiver();
+        } else {
+            removeMusicInputReceiver();
+        }
 
-        final RecyclerView.LayoutManager layoutManager = new LinearLayoutManager(this);
-        recyclerView.setLayoutManager(layoutManager);
-
-        adapter = new RecyclerViewItemListAdapter(getBaseContext());
         fragmentManager = getSupportFragmentManager();
 
         service = ServiceFactory.createRetrofitService(ArtistService.class,
@@ -78,62 +67,52 @@ public class MainActivity extends BaseActivity
 
         if (savedInstanceState != null) {
             artistListCache = savedInstanceState.getParcelableArrayList(SAVE_LISTARTIST_KEY);
-            adapter.addAllData(artistListCache);
+            mainListArtist.addAll(artistListCache);
+
         } else {
-            downloadDate(service);
+            downloadData(service);
         }
+    }
 
+    private boolean getPreferenceNotification(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.preference_notify), true);
+    }
 
-        recyclerView.addItemDecoration(new DividerItemDecoration(this,
-                LinearLayoutManager.VERTICAL));
+    private void addMusicInputReceiver() {
+        musicInputReceiver = new MusicInputReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(musicInputReceiver, filter);
+    }
 
-        recyclerView.setAdapter(adapter);
+    private void removeMusicInputReceiver() {
+        if (musicInputReceiver != null) {
+            musicInputReceiver.closeNotify();
+            unregisterReceiver(musicInputReceiver);
+        }
+    }
 
-        adapter.setOnItemClickListener(new RecyclerViewItemListAdapter
-                .RecyclerViewItemClickListener() {
-            @Override
-            public void onItemClick(int position, View view) {
-                Artist artist = adapter.getItem(position);
-                ImageView imageView = (ImageView) view.findViewById(R.id.image_details);
-                Bitmap imageArtist = ((BitmapDrawable)imageView.getDrawable()).getBitmap();
-
-                Intent intent = ArtistDetailsActivity.newIntent(getApplicationContext(),
-                        artist, imageArtist);
-
-                if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.LOLLIPOP) {
-                    Pair<View, String> p1 = Pair.create(view.findViewById(R.id.image_details),
-                            getString(R.string.image_trans));
-                    ActivityOptionsCompat options = ActivityOptionsCompat.
-                            makeSceneTransitionAnimation(MainActivity.this, p1);
-                    startActivity(intent, options.toBundle());
-                } else {
-                    startActivity(intent);
-                }
-            }
-        });
-
-        swipeRefreshLayout.setOnRefreshListener(new SwipeRefreshLayout.OnRefreshListener() {
-            @Override
-            public void onRefresh() {
-                downloadDate(service);
-            }
-        });
+    @Override
+    protected void onPause() {
+        super.onPause();
+        if (subscription != null && !subscription.isUnsubscribed()) {
+            subscription.unsubscribe();
+        }
     }
 
     @Override
     protected void onDestroy() {
         super.onDestroy();
+        removeMusicInputReceiver();
     }
 
-
-    /*
-    * downloads data from json and adds data in adapter and local cache
-    * if download error and cache is empty, then show error fragment
-    * */
-    private void downloadDate(ArtistService service) {
-        showIndicationDownload();
-        service.getDataArtist()
-                .subscribeOn(Schedulers.newThread())
+    /**
+     * downloads data from json and adds data in adapter and local cache
+     * if download error and cache is empty, then show error fragment
+     */
+    private void downloadData(ArtistService service) {
+        subscription = service.getDataArtist()
+                .subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())
                 .subscribe(new Subscriber<List<Artist>>() {
 
@@ -142,10 +121,11 @@ public class MainActivity extends BaseActivity
                         removeErrorFragment();
 //                        updated local cache
                         artistListCache.clear();
-                        artistListCache.addAll(adapter.getAllData());
+                        // обновить кэш
+                        artistListCache.addAll(mainListArtist);
                         Cache.writeToCache(artistListCache, getApplicationContext());
                         //stop animation downloads
-                        hideIndicationDownload();
+                        addFragmentListArtist();
                         Toast.makeText(getApplicationContext(),
                                 R.string.text_toast_download_complete,
                                 Toast.LENGTH_SHORT).show();
@@ -154,20 +134,18 @@ public class MainActivity extends BaseActivity
                     @Override
                     public final void onError(Throwable e) {
                         Log.e(LOG_TAG, e.getMessage());
-
-                        //stop animation downloads
-                        hideIndicationDownload();
-
                         /*
                         * if local cache isn't empty
                         * */
                         try {
                             artistListCache = Cache.readFromCache(getApplicationContext());
-                        } catch (Exception ex) {
+                        } catch (Exception ignored) {
 
                         } finally {
                             if (artistListCache.size() > 0) {
-                                adapter.addAllData(artistListCache);
+                                //хватаем данные из кэша
+                                mainListArtist.addAll(artistListCache);
+                                addFragmentListArtist();
                                 Toast.makeText(getApplicationContext(),
                                         R.string.text_toast_error,
                                         Toast.LENGTH_SHORT).show();
@@ -179,33 +157,11 @@ public class MainActivity extends BaseActivity
 
                     @Override
                     public void onNext(List<Artist> artists) {
-                        adapter.clear();
-                        adapter.addAllData(artists);
+                        // чистим и добавляем данные в адаптер
+                        mainListArtist.clear();
+                        mainListArtist.addAll(artists);
                     }
                 });
-    }
-
-
-    private void showIndicationDownload() {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(true);
-                }
-            });
-        }
-    }
-
-    private void hideIndicationDownload() {
-        if (swipeRefreshLayout != null) {
-            swipeRefreshLayout.post(new Runnable() {
-                @Override
-                public void run() {
-                    swipeRefreshLayout.setRefreshing(false);
-                }
-            });
-        }
     }
 
     /*
@@ -226,19 +182,45 @@ public class MainActivity extends BaseActivity
     private void addErrorConnection() {
         ErrorConnectionFragment errorConnectionFragment = ErrorConnectionFragment.newInstance();
         fragmentManager.beginTransaction()
-                .replace(R.id.container, errorConnectionFragment, TAG_ERROR_CONNECTION)
+                .replace(R.id.main_container, errorConnectionFragment, TAG_ERROR_CONNECTION)
+                .commit();
+    }
+
+    private void addFragmentListArtist() {
+        ArtistListFragment artistListFragment = ArtistListFragment.newInstance(mainListArtist);
+        fragmentManager.beginTransaction()
+                .replace(R.id.main_container, artistListFragment)
                 .commit();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY,
-                (ArrayList<? extends Parcelable>) artistListCache);
+        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY, artistListCache);
     }
 
     @Override
     public void onErrorConnectiontClicked() {
-        downloadDate(service);
+        downloadData(service);
+    }
+
+    @Override
+    public void onSettingsClicked() {
+        SettingFragment settingFragment = SettingFragment.newInstance();
+        addFragment(settingFragment);
+    }
+
+    @Override
+    public void onListAtristClicked(int indexClikArtist) {
+        ArtistDetailsFragment artistDetailsFragment = ArtistDetailsFragment.newInstance(mainListArtist.get(indexClikArtist));
+        addFragment(artistDetailsFragment);
+    }
+
+    private void addFragment(Fragment fragment) {
+        fragmentManager.beginTransaction()
+                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
+                .replace(R.id.main_container, fragment)
+                .addToBackStack(null)
+                .commit();
     }
 }

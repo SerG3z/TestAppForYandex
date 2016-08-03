@@ -1,0 +1,9 @@
+<?xml version="1.0" encoding="utf-8"?>
+<PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
+    <PreferenceCategory android:title="@string/category_notify">
+        <SwitchPreference
+            android:title="@string/switch_title"
+            android:key="@string/preference_notify"
+            android:defaultValue="true"></SwitchPreference>
+    </PreferenceCategory>
+</PreferenceScreen>

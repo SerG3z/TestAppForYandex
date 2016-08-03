@@ -44,7 +44,7 @@ public class ErrorConnectionFragment extends Fragment {
     }
 
     @OnClick(R.id.button_repeat)
-    public void onClickButtonRepeat() {
+    void onClickButtonRepeat() {
         if (listener != null) {
             listener.onErrorConnectiontClicked();
         }
