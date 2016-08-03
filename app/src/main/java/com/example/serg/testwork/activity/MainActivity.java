@@ -1,11 +1,13 @@
 package com.example.serg.testwork.activity;
 
+import android.content.Context;
 import android.content.Intent;
 import android.content.IntentFilter;
 import android.os.Bundle;
-import android.os.Parcelable;
+import android.support.v4.app.Fragment;
 import android.support.v4.app.FragmentManager;
 import android.support.v7.app.AppCompatActivity;
+import android.support.v7.preference.PreferenceManager;
 import android.util.Log;
 import android.widget.Toast;
 
@@ -32,11 +34,7 @@ public class MainActivity extends AppCompatActivity
         implements ErrorConnectionFragment.ErrorConnectionFragmentListener,
         ArtistListFragment.ListArtistFragmentListener {
 
-    private static final String TAG_SETTINGS_FRAGMENT = "settings_fragment";
     private static final String TAG_ERROR_CONNECTION = "error_connection_fragment";
-    private static final String TAG_DETAILS_FRAGMENT = "details_fragment";
-    private static final String TAG_LIST_FRAGMENT = "list_fragment";
-    private static final String TAG_BACK_STACK = "stack";
     private static final String SAVE_LISTARTIST_KEY = "save_list_artist";
     private static final String LOG_TAG = "Error download";
 
@@ -54,9 +52,11 @@ public class MainActivity extends AppCompatActivity
         setContentView(R.layout.activity_main);
         super.onCreate(savedInstanceState);
 
-        musicInputReceiver = new MusicInputReceiver();
-        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
-        registerReceiver(musicInputReceiver, filter);
+        if (getPreferenceNotification(getApplicationContext())) {
+            addMusicInputReceiver();
+        } else {
+            removeMusicInputReceiver();
+        }
 
         fragmentManager = getSupportFragmentManager();
 
@@ -72,16 +72,34 @@ public class MainActivity extends AppCompatActivity
         }
     }
 
+    private boolean getPreferenceNotification(Context context) {
+        return PreferenceManager.getDefaultSharedPreferences(context)
+                .getBoolean(context.getString(R.string.preference_notify), true);
+    }
+
+    private void addMusicInputReceiver() {
+        musicInputReceiver = new MusicInputReceiver();
+        IntentFilter filter = new IntentFilter(Intent.ACTION_HEADSET_PLUG);
+        registerReceiver(musicInputReceiver, filter);
+    }
+
+    private void removeMusicInputReceiver() {
+        if (musicInputReceiver != null) {
+            musicInputReceiver.closeNotify();
+            unregisterReceiver(musicInputReceiver);
+        }
+    }
+
     @Override
     protected void onDestroy() {
         super.onDestroy();
-        musicInputReceiver.closeNotify();
+        removeMusicInputReceiver();
     }
 
     /*
-        * downloads data from json and adds data in adapter and local cache
-        * if download error and cache is empty, then show error fragment
-        * */
+     * downloads data from json and adds data in adapter and local cache
+     * if download error and cache is empty, then show error fragment
+     * */
     private void downloadDate(ArtistService service) {
         service.getDataArtist()
                 .subscribeOn(Schedulers.newThread())
@@ -112,7 +130,7 @@ public class MainActivity extends AppCompatActivity
                         * */
                         try {
                             artistListCache = Cache.readFromCache(getApplicationContext());
-                        } catch (Exception ex) {
+                        } catch (Exception ignored) {
 
                         } finally {
                             if (artistListCache.size() > 0) {
@@ -164,15 +182,14 @@ public class MainActivity extends AppCompatActivity
     private void addFragmentListArtist() {
         ArtistListFragment artistListFragment = ArtistListFragment.newInstance(mainListArtist);
         fragmentManager.beginTransaction()
-                .replace(R.id.main_container, artistListFragment, TAG_LIST_FRAGMENT)
+                .replace(R.id.main_container, artistListFragment)
                 .commit();
     }
 
     @Override
     protected void onSaveInstanceState(Bundle outState) {
         super.onSaveInstanceState(outState);
-        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY,
-                (ArrayList<? extends Parcelable>) artistListCache);
+        outState.putParcelableArrayList(SAVE_LISTARTIST_KEY, artistListCache);
     }
 
     @Override
@@ -182,22 +199,21 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     public void onSettingsClicked() {
-
         SettingFragment settingFragment = SettingFragment.newInstance();
-        fragmentManager.beginTransaction()
-                .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.main_container, settingFragment, TAG_SETTINGS_FRAGMENT)
-                .addToBackStack(TAG_BACK_STACK)
-                .commit();
+        addFragment(settingFragment);
     }
 
     @Override
     public void onListAtristClicked(int indexClikArtist) {
         ArtistDetailsFragment artistDetailsFragment = ArtistDetailsFragment.newInstance(mainListArtist.get(indexClikArtist));
+        addFragment(artistDetailsFragment);
+    }
+
+    private void addFragment(Fragment fragment) {
         fragmentManager.beginTransaction()
                 .setCustomAnimations(R.anim.slide_in_right, R.anim.slide_out_left, R.anim.slide_in_left, R.anim.slide_out_right)
-                .replace(R.id.main_container, artistDetailsFragment, TAG_DETAILS_FRAGMENT)
-                .addToBackStack(TAG_BACK_STACK)
+                .replace(R.id.main_container, fragment)
+                .addToBackStack(null)
                 .commit();
     }
 }

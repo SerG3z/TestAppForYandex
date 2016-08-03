@@ -12,12 +12,7 @@ import com.example.serg.testwork.R;
 public class SettingFragment extends PreferenceFragmentCompat {
 
     public static SettingFragment newInstance() {
-
-        Bundle args = new Bundle();
-
-        SettingFragment fragment = new SettingFragment();
-        fragment.setArguments(args);
-        return fragment;
+        return new SettingFragment();
     }
 
     @Override

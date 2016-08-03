@@ -7,7 +7,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.annotation.Nullable;
 import android.support.design.widget.Snackbar;
-import android.support.v4.app.Fragment;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.Toolbar;
 import android.view.LayoutInflater;
@@ -23,14 +22,13 @@ import com.example.serg.testwork.adapters.RecyclerViewItemListAdapter;
 import com.example.serg.testwork.models.Artist;
 
 import butterknife.Bind;
-import butterknife.ButterKnife;
 import butterknife.OnClick;
 
 /**
  * Created by user on 16.07.16.
  */
 
-public class ArtistDetailsFragment extends Fragment {
+public class ArtistDetailsFragment extends BaseFragment {
 
     @Bind(R.id.image_details)
     ImageView imageView;
@@ -62,9 +60,7 @@ public class ArtistDetailsFragment extends Fragment {
     @Nullable
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
-        View view = inflater.inflate(R.layout.artist_details_scrolling, container, false);
-        ButterKnife.bind(this, view);
-        return view;
+        return inflater.inflate(R.layout.artist_details_scrolling, container, false);
     }
 
     @Override
@@ -123,11 +119,5 @@ public class ArtistDetailsFragment extends Fragment {
             snackBarView.setBackgroundColor(color);
             snackbar.show();
         }
-    }
-
-    @Override
-    public void onDestroy() {
-        super.onDestroy();
-        ButterKnife.unbind(this);
     }
 }
